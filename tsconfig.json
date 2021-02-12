@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
     "mapRoot": "./sketch/",
-    "module": "none",
+    "esModuleInterop": true,
     "noImplicitAny": true,
     "outFile": "./build/build.js",
+    "module": "amd",
     "preserveConstEnums": true,
     "removeComments": true,
     "rootDir": "./sketch/",

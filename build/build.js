@@ -1,55 +1,39 @@
-var ColorHelper = (function () {
-    function ColorHelper() {
-    }
-    ColorHelper.getColorVector = function (c) {
-        return createVector(red(c), green(c), blue(c));
-    };
-    ColorHelper.rainbowColorBase = function () {
-        return [
-            color('red'),
-            color('orange'),
-            color('yellow'),
-            color('green'),
-            color(38, 58, 150),
-            color('indigo'),
-            color('violet')
-        ];
-    };
-    ColorHelper.getColorsArray = function (total, baseColorArray) {
-        var _this = this;
-        if (baseColorArray === void 0) { baseColorArray = null; }
-        if (baseColorArray == null) {
-            baseColorArray = ColorHelper.rainbowColorBase();
-        }
-        var rainbowColors = baseColorArray.map(function (x) { return _this.getColorVector(x); });
-        ;
-        var colours = new Array();
-        for (var i = 0; i < total; i++) {
-            var colorPosition = i / total;
-            var scaledColorPosition = colorPosition * (rainbowColors.length - 1);
-            var colorIndex = Math.floor(scaledColorPosition);
-            var colorPercentage = scaledColorPosition - colorIndex;
-            var nameColor = this.getColorByPercentage(rainbowColors[colorIndex], rainbowColors[colorIndex + 1], colorPercentage);
-            colours.push(color(nameColor.x, nameColor.y, nameColor.z));
-        }
-        return colours;
-    };
-    ColorHelper.getColorByPercentage = function (firstColor, secondColor, percentage) {
-        var firstColorCopy = firstColor.copy();
-        var secondColorCopy = secondColor.copy();
-        var deltaColor = secondColorCopy.sub(firstColorCopy);
-        var scaledDeltaColor = deltaColor.mult(percentage);
-        return firstColorCopy.add(scaledDeltaColor);
-    };
-    return ColorHelper;
-}());
+var Engine;
+var Render;
+var World;
+var Bodies;
+var engine;
+var render;
+var boxA;
+var boxB;
+var ground;
 function setup() {
     console.log("🚀 - Setup initialized - P5 is running");
-    createCanvas(windowWidth, windowHeight);
-    rectMode(CENTER).noFill().frameRate(30);
+    console.log(windowWidth, windowHeight);
+    createCanvas(800, 800);
+    rectMode(CENTER).noStroke().frameRate(60);
+    Engine = Matter.Engine;
+    Render = Matter.Render;
+    World = Matter.World;
+    Bodies = Matter.Bodies;
+    engine = Engine.create();
+    render = Render.create({
+        element: document.body,
+        engine: engine
+    });
+    boxA = Bodies.rectangle(385, 690, 10, 30);
+    ground = Bodies.rectangle(0, 700, 1600, 50, { isStatic: true });
+    Matter.Engine.run(engine);
+    World.add(engine.world, [boxA, ground]);
+    Matter.Body.applyForce(boxA, Matter.Vector.create(-1, 1), Matter.Vector.create(0.0001, 0));
 }
 function draw() {
-    background(0);
+    background(180);
+    Matter.Engine.update(engine);
+    var c = color([180, 12, 44]);
+    fill(c);
+    rect(boxA.position.x, boxA.position.y, 10, 30);
+    console.log(boxA.position);
 }
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
