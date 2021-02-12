@@ -1,3 +1,20 @@
+var Rocket = (function () {
+    function Rocket(_a) {
+        var body = _a.body, ancetrals = _a.ancetrals;
+        this.body = body;
+        if (ancetrals) {
+            this.mate(ancetrals);
+        }
+        else {
+            this.initialize();
+        }
+    }
+    Rocket.prototype.initialize = function () {
+    };
+    Rocket.prototype.mate = function (ancestrals) {
+    };
+    return Rocket;
+}());
 var Engine;
 var Render;
 var World;
